@@ -1,0 +1,63 @@
+defaults:
+  - mv_model: mae_model 
+  - override hydra/launcher: submitit_local
+
+# data
+folder: PATH/TO/TRAIN
+eval_folder: PATH/TO/EVAL
+max_dataset_size: 10000000
+train_sampling: shuffle
+eval_sampling: shuffle
+sample_weight: 1
+# observations
+obs_key: [zoom_left,zoom_right]
+
+# experiment
+experiment_folder: test
+experiment_name: test
+
+# train params
+lr: 3e-5
+scheduler: None
+schedule_every_step: 10000
+batch_size: 32 
+shard: 128
+shuffle: True
+num_threads: 4
+n_epochs: 100
+print_every_step: 100
+
+# eval params
+eval_every_step: 1000
+eval_iters: 10
+plot_every_step: 1000
+n_plot_data: 3
+
+# snapshot
+snapshot_dir: ./ckpt
+save_every_step: 10000
+
+# restore
+restore_snapshot_path: None
+
+# misc
+seed: 1
+device: cuda:1
+use_tb: True
+use_wandb: False
+name: train_mv
+
+hydra:
+  run:
+    dir: ./experiments/multiview/${experiment_folder}/${experiment_name}
+  sweep:
+    dir: ./exp_sweep/${now:%Y.%m.%d}/${now:%H%M}_${agent.name}_${experiment}
+    subdir: ${hydra.job.num}
+  launcher:
+    timeout_min: 4300
+    cpus_per_task: 10
+    gpus_per_node: 1
+    tasks_per_node: 1
+    mem_gb: 160
+    nodes: 1
+    submitit_folder: ./exp_sweep/${now:%Y.%m.%d}/${now:%H%M}_${agent.name}_${experiment}/.slurm

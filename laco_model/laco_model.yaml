@@ -1,0 +1,42 @@
+_target_: laco_model.laco_model.LACOModel
+name: laco
+
+# infra
+device: ${device}
+lr: ${lr}
+weight_decay: 1e-1 
+scheduler: ${scheduler}
+schedule_every_step: ${schedule_every_step}
+normalize_state: true
+
+# model
+obs_encoder_id: clip16
+patch_size: 16
+threshold: 0.5
+use_mv: ${use_mv}
+mv_train_status: frozen # [frozen, from_scratch, finetune]
+state_dim: 7
+
+# transformer
+token_dim: 768
+dropout: 0
+n_layer: 2 
+bias: false
+n_head: 16
+attention_feat: average
+modality_embedding: true
+
+# language model
+encoder: clip16
+model_max_length: 53 
+freeze_language_encoder: true
+
+# architecture
+state_hidden_dim: [4096,4096,4096]
+net_hidden_dim: [512,256]
+n_obs_attn_layer: 0 # additional attention layers for obs tokens
+use_transformer_pos_emb: false
+
+# loss
+pred_coll_loss: true 
+alpha_coll_loss: 1 # weight for coll_change_loss

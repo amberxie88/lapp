@@ -1,0 +1,50 @@
+defaults:
+  - _self_
+  - override hydra/launcher: submitit_local
+
+env: sim_shapenet
+# experiment
+experiment_folder: test
+experiment_name: test
+# data saving hps
+save_folder: PATH/TO/SAVE
+save_prefix: j3
+n_data: 1
+# data generation
+reset_every: 1
+radius: 0.15
+noise: 0.1
+camera: [zoom,zoom_left,zoom_right]
+randomize_every: 0 # set to 1 for real_ycb
+max_states_per_env: 1000 # used for real_ycb
+num_obs_per_env: 5 
+
+# object/domain randomization
+n_objects_min: 2
+n_objects_max: 5
+# shapenet objects to generate 
+shapenet_to_generate: [airplane,basketbal,chair,pot,vessel,laptop,bus,cap,bottle]
+obj_split: train # [train, eval]
+
+# infra
+seed: 1
+device: cuda:0
+save_video: True
+use_tb: True
+use_wandb: False
+save_viz: False # save videos + plots for easier viewing
+
+hydra:
+  run:
+    dir: ./experiments/data/${now:%Y.%m.%d}_${experiment_folder}/${now:%H%M}_${experiment_name}
+  sweep:
+    dir: ./exp_sweep/${now:%Y.%m.%d}/${now:%H%M}_${agent.name}_${experiment}
+    subdir: ${hydra.job.num}
+  launcher:
+    timeout_min: 4300
+    cpus_per_task: 10
+    gpus_per_node: 1
+    tasks_per_node: 1
+    mem_gb: 160
+    nodes: 1
+    submitit_folder: ./exp_sweep/${now:%Y.%m.%d}/${now:%H%M}_${agent.name}_${experiment}/.slurm

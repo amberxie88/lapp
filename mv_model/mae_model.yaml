@@ -1,0 +1,36 @@
+_target_: mv_model.mae_model.MAEModel
+name: mae
+
+# infra
+device: ${device}
+lr: ${lr}
+weight_decay: 1e-1 
+scheduler: ${scheduler}
+schedule_every_step: ${schedule_every_step}
+
+# model
+obs_encoder_id: multimae_patch
+viewpoints: ${obs_key}
+
+# architecture
+dropout: 0
+bias: False
+token_dim: 768
+viewpoint_embedding: True
+
+# masking
+mask_ratio: 0.8
+reconstruct_cls: False
+
+# mae encoder
+encoder_n_layer: 8 # 12
+encoder_n_head: 12
+encoder_embed_dim: 768
+
+# mae decoder
+decoder_n_layer: 6 # 8
+decoder_n_head: 16
+decoder_embed_dim: 512
+
+# loss
+loss: l2_mean

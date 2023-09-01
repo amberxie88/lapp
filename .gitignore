@@ -1,0 +1,15 @@
+.idea/
+.ipynb_checkpoints/
+*.pyc
+__pycache__
+exp_local/
+.vscode
+eval_*/
+debug_*/
+.DS_Store
+experiments/
+logs/
+sftp-config.json
+viz/
+logs/
+*.tar.gz
